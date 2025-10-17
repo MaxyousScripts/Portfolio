@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maxyous - Luau Scripter Portfolio</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: #000000; /* Pure black background */
+            color: #e0e0e0;
+            line-height: 1.8;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1; /* Behind all content */
+        }
+
+        header {
+            background: linear-gradient(135deg, #1e40af, #60a5fa);
+            color: #ffffff;
+            text-align: center;
+            padding: 80px 20px;
+            position: relative;
+            overflow: hidden;
+            animation: fadeInDown 1.2s ease-out;
+            z-index: 1;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1), transparent);
+            opacity: 0.3;
+        }
+
+        header h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            animation: zoomIn 1s ease-out;
+            position: relative;
+            z-index: 1;
+        }
+
+        header p {
+            font-size: 1.3rem;
+            font-weight: 300;
+            opacity: 0.9;
+            position: relative;
+            z-index: 1;
+        }
+
+        nav {
+            background: rgba(10, 10, 10, 0.9); /* Slightly transparent nav */
+            padding: 20px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.6);
+            backdrop-filter: blur(5px);
+        }
+
+        nav a {
+            color: #ffffff;
+            text-decoration: none;
+            margin: 0 25px;
+            font-size: 1.1rem;
+            font-weight: 400;
+            transition: color 0.3s, transform 0.3s;
+        }
+
+        nav a:hover {
+            color: #60a5fa;
+            transform: translateY(-2px);
+        }
+
+        section {
+            max-width: 1100px;
+            margin: 50px auto;
+            padding: 30px;
+            background: rgba(30, 30, 30, 0.7); /* Semi-transparent background */
+            border-radius: 12px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+            opacity: 0;
+            transform: translateY(60px);
+            animation: fadeInUp 0.8s ease-out forwards;
+            animation-delay: 0.3s;
+            position: relative;
+            z-index: 1;
+            backdrop-filter: blur(3px); /* Subtle blur for glass effect */
+        }
+
+        h2 {
+            font-size: 2.5rem;
+            font-weight: 600;
+            margin-bottom: 25px;
+            color: #60a5fa;
+            position: relative;
+        }
+
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background: #60a5fa;
+            border-radius: 2px;
+        }
+
+        #about p {
+            font-size: 1.15rem;
+            color: #d0d0d0; /* Lighter for contrast */
+            font-weight: 300;
+        }
+
+        #skills ul {
+            list-style: none;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+        }
+
+        #skills li {
+            background: rgba(42, 42, 42, 0.7); /* Semi-transparent skill cards */
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: 500;
+            color: #e0e0e0;
+            transition: transform 0.4s, background 0.4s, box-shadow 0.4s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        #skills li::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(96,165,250,0.2), transparent);
+            transition: 0.5s;
+        }
+
+        #skills li:hover::before {
+            left: 100%;
+        }
+
+        #skills li:hover {
+            transform: translateY(-8px);
+            background: rgba(96, 165, 250, 0.9); /* Less transparent on hover */
+            color: #ffffff;
+            box-shadow: 0 8px 20px rgba(96,165,250,0.4);
+        }
+
+        #portfolio .project {
+            margin: 25px 0;
+            padding: 25px;
+            background: rgba(42, 42, 42, 0.7); /* Semi-transparent project cards */
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            transition: transform 0.4s, box-shadow 0.4s;
+        }
+
+        #portfolio .project:hover {
+            transform: scale(1.03);
+            box-shadow: 0 8px 25px rgba(96,165,250,0.3);
+        }
+
+        #portfolio .project h3 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: #60a5fa;
+            margin-bottom: 10px;
+        }
+
+        #portfolio .project p {
+            color: #d0d0d0; /* Lighter for contrast */
+            font-weight: 300;
+        }
+
+        #contact p {
+            font-size: 1.15rem;
+            font-weight: 300;
+            margin-bottom: 15px;
+            color: #d0d0d0; /* Lighter for contrast */
+        }
+
+        #contact a {
+            color: #60a5fa;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        #contact a:hover {
+            color: #93c5fd;
+            text-decoration: underline;
+        }
+
+        footer {
+            background: rgba(10, 10, 10, 0.9); /* Slightly transparent footer */
+            color: #ffffff;
+            text-align: center;
+            padding: 20px;
+            margin-top: 50px;
+            font-weight: 300;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Animations */
+        @keyframes fadeInDown {
+            0% { opacity: 0; transform: translateY(-60px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInUp {
+            0% { opacity: 0; transform: translateY(60px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes zoomIn {
+            0% { opacity: 0; transform: scale(0.7); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2.5rem;
+            }
+
+            header p {
+                font-size: 1.1rem;
+            }
+
+            nav a {
+                margin: 0 15px;
+                font-size: 1rem;
+            }
+
+            section {
+                margin: 20px;
+                padding: 20px;
+            }
+
+            h2 {
+                font-size: 2rem;
+            }
+
+            #skills ul {
+                grid-template-columns: 1fr;
+            }
+
+            #portfolio .project h3 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <canvas id="backgroundCanvas"></canvas>
+    <header>
+        <h1>Maxyous</h1>
+        <p>Luau Scripter & Roblox Developer</p>
+    </header>
+
+    <nav>
+        <a href="#about">Who Am I?</a>
+        <a href="#skills">Skills</a>
+        <a href="#portfolio">Portfolio</a>
+        <a href="#contact">Contact Me</a>
+    </nav>
+
+    <section id="about">
+        <h2>Who Am I?</h2>
+        <p>I'm Maxyous, a passionate Luau scripter with one month of experience in Roblox development. Despite my short time in the field, I've quickly mastered advanced Luau concepts and techniques, enabling me to create robust and engaging gameplay systems. My dedication to coding drives me to build efficient, scalable, and user-friendly experiences.</p>
+    </section>
+
+    <section id="skills">
+        <h2>Skills</h2>
+        <ul>
+            <li>Metatables & OOP for complex class structures</li>
+            <li>Coroutines for asynchronous task handling</li>
+            <li>DataStoreService for persistent data management</li>
+            <li>RemoteEvents & RemoteFunctions for networking</li>
+            <li>TweenService for smooth UI animations</li>
+            <li>PathfindingService for advanced AI navigation</li>
+            <li>ModuleScripts for modular code organization</li>
+            <li>Performance optimization & garbage collection</li>
+        </ul>
+    </section>
+
+    <section id="portfolio">
+        <h2>Portfolio</h2>
+        <div class="project">
+            <h3>Leveling System</h3>
+            <p>A dynamic leveling system built in Luau for Roblox, featuring experience tracking, level progression, reward unlocks, and DataStore integration for persistent player data. This project showcases my ability to handle complex scripting and event-driven programming.</p>
+        </div>
+        <div class="project">
+            <h3>Project 2</h3>
+            <p>Coming soon...</p>
+        </div>
+        <div class="project">
+            <h3>Project 3</h3>
+            <p>Coming soon...</p>
+        </div>
+    </section>
+
+    <section id="contact">
+        <h2>Contact Me</h2>
+        <p>I'm open to freelance opportunities and collaborations. Have a project idea or want to connect? Reach out!</p>
+        <p>Discord: <a href="#">3vjsz</a></p>
+    </section>
+
+    <footer>
+        <p>&copy; 2025 Maxyous. All rights reserved.</p>
+    </footer>
+
+    <script>
+        const canvas = document.getElementById('backgroundCanvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const dots = [];
+        const numDots = 100;
+        const maxDistance = 150; // Distance for connecting lines
+        const lineColor = 'rgba(0, 255, 0, 0.5)'; // Cybernetic green
+
+        // Create dots
+        for (let i = 0; i < numDots; i++) {
+            dots.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                vx: (Math.random() - 0.5) * 0.5, // Slow movement
+                vy: (Math.random() - 0.5) * 0.5
+            });
+        }
+
+        let mouse = { x: null, y: null };
+
+        // Track mouse movement
+        window.addEventListener('mousemove', (event) => {
+            mouse.x = event.clientX;
+            mouse.y = event.clientY;
+        });
+
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Draw dots
+            dots.forEach(dot => {
+                // Update position
+                dot.x += dot.vx;
+                dot.y += dot.vy;
+
+                // Bounce off edges
+                if (dot.x < 0 || dot.x > canvas.width) dot.vx *= -1;
+                if (dot.y < 0 || dot.y > canvas.height) dot.vy *= -1;
+
+                // Draw dot
+                ctx.beginPath();
+                ctx.arc(dot.x, dot.y, 2, 0, Math.PI * 2);
+                ctx.fillStyle = '#ffffff';
+                ctx.fill();
+
+                // Draw lines to nearby dots if mouse is close
+                if (mouse.x !== null && mouse.y !== null) {
+                    const dx = mouse.x - dot.x;
+                    const dy = mouse.y - dot.y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+                    if (distance < maxDistance) {
+                        ctx.beginPath();
+                        ctx.moveTo(dot.x, dot.y);
+                        ctx.lineTo(mouse.x, mouse.y);
+                        ctx.strokeStyle = lineColor;
+                        ctx.lineWidth = 1;
+                        ctx.stroke();
+                    }
+                }
+            });
+
+            // Draw lines between close dots
+            for (let i = 0; i < dots.length; i++) {
+                for (let j = i + 1; j < dots.length; j++) {
+                    const dx = dots[i].x - dots[j].x;
+                    const dy = dots[i].y - dots[j].y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+                    if (distance < maxDistance) {
+                        ctx.beginPath();
+                        ctx.moveTo(dots[i].x, dots[i].y);
+                        ctx.lineTo(dots[j].x, dots[j].y);
+                        ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
+                        ctx.lineWidth = 0.5;
+                        ctx.stroke();
+                    }
+                }
+            }
+
+            requestAnimationFrame(animate);
+        }
+
+        animate();
+    </script>
+</body>
+</html>
